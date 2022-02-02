@@ -1,6 +1,11 @@
 #include "SOS.h"
 #include "SOSUtils.h"
 #include "json.hpp"
+#include "date.h"
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <string>
 
 void SOS::HookAllEvents()
 {
@@ -148,7 +153,22 @@ void SOS::HookMatchCreated()
     LOGC(" -------------- MATCH CREATED -------------- ");
 
     ServerWrapper server = SOSUtils::GetCurrentGameState(gameWrapper);
-    CurrentMatchGuid = server.GetMatchGUID();
+    std::string id = server.GetMatchGUID();
+
+    using sc = std::chrono::system_clock;
+    
+    if (id == "") {
+        std::time_t t = sc::to_time_t(sc::now());
+        char buf[20];
+        tm localTime;
+        localtime_s(&localTime, &t);
+        strftime(buf, 20, "%Y%m%d%H%M%S", &localTime);
+        CurrentMatchGuid = "LAN" + std::string(buf);
+    }
+    else {
+        CurrentMatchGuid = id;
+    }
+
     Clock->UpdateCurrentMatchGuid(CurrentMatchGuid);
 
     Clock->ResetClock();
@@ -343,7 +363,7 @@ void SOS::HookReplayScoreDataChanged(ActorWrapper caller)
     goalScoreData["impact_location"]["Y"] = GoalImpactLocation.Y; // Set in HookOnHitGoal
     goalScoreData["scorer"]["name"] = ScorerName;
     goalScoreData["scorer"]["id"] = ScorerID;
-    goalScoreData["scorer"]["teamnum"] = ScoreData.ScoreTeam;
+    goalScoreData["scorer"]["team_num"] = ScoreData.ScoreTeam;
     goalScoreData["assister"]["name"] = AssisterName;
     goalScoreData["assister"]["id"] = AssisterID;
     goalScoreData["ball_last_touch"]["player"] = lastTouch.playerID; // Set in HookCarBallHit
