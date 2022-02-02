@@ -1,5 +1,5 @@
 [submodule "sos-plugin-includes"]
 	path = sos-plugin-includes
-url=https://gitlab.com/SilentEchoUK/sos-plugin-includes
+url=git@gitlab.com:SilentEchoUK/sos-plugin-includes.git
 	branch = master
 	update = rebase
