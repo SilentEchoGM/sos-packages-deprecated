@@ -221,7 +221,10 @@ void SOS::HookCountdownInit()
     {
         bPendingRestartFromKickoff = true;
     }
-	
+
+    //Sometimes the match_guid appears not to update on a new game, adding this as braces to the belt
+    SaveMatchGuid();
+
     json event;
     event["match_guid"] = CurrentMatchGuid;
 
