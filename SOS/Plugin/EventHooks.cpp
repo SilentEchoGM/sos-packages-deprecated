@@ -146,18 +146,14 @@ void SOS::HookInitTeams()
     }
 }
 
-void SOS::HookMatchCreated()
+void SOS::SaveMatchGuid()
 {
-    // Called by HookInitTeams //
-
-    LOGC(" -------------- MATCH CREATED -------------- ");
-
     ServerWrapper server = SOSUtils::GetCurrentGameState(gameWrapper);
-    std::string id = server.GetMatchGUID();
+    const std::string id = server.GetMatchGUID();
 
     using sc = std::chrono::system_clock;
     
-    if (id == "") {
+    if (id.empty()) {
         std::time_t t = sc::to_time_t(sc::now());
         char buf[20];
         tm localTime;
@@ -170,6 +166,15 @@ void SOS::HookMatchCreated()
     }
 
     Clock->UpdateCurrentMatchGuid(CurrentMatchGuid);
+}
+
+void SOS::HookMatchCreated()
+{
+    // Called by HookInitTeams //
+
+    LOGC(" -------------- MATCH CREATED -------------- ");
+
+    SaveMatchGuid();
 
     Clock->ResetClock();
     matchCreated = true;

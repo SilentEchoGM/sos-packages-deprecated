@@ -58,6 +58,7 @@ private:
     void HookBallExplode();
     void HookOnHitGoal(BallWrapper ball, void* params);
     void HookInitTeams();
+    void SaveMatchGuid();
     void HookMatchCreated();
     void HookMatchDestroyed();
     void HookMatchEnded();
