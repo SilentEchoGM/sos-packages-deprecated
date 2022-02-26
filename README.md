@@ -143,7 +143,7 @@ The websocket reports the following events in `channel:event` format:
     "scorer": {
       "id": "string",
       "name": "string",
-      "teamnum": "number"
+      "team_num": "number"
     }
   },
   "game:replay_start": "string",
