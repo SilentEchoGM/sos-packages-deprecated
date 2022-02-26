@@ -50,6 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>E:\Projects\sos\sos-plugin\sos-plugin-includes;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)..\release\sos-plugin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Nameplates|x64'">
     <LinkIncremental>false</LinkIncremental>
