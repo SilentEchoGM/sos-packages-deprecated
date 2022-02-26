@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "../release/sos-types",
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true,
+    "incremental": true
+  }
+}
