@@ -2,7 +2,7 @@
   "name": "sos-plugin-types",
   "version": "1.0.0",
   "description": "TypeScript typings and string constants for the SOS plugin for Bakkesmod",
-  "main": "sosConsts.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
