@@ -2,7 +2,7 @@ import { app, BrowserWindow } from "electron";
 import { getLogger } from "./lib/logger";
 import { join } from "path";
 import { fork } from "child_process";
-import { startSOSEmulator } from "./socket";
+import { startSOSEmulator } from "./lib/socket";
 import { URL } from "url";
 const log = getLogger({ filepath: "electron/main.ts" });
 

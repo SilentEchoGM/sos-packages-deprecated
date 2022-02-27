@@ -17,7 +17,15 @@
   },
   "homepage": "https://github.com/SilentEchoUK/sos-packages#readme",
   "dependencies": {
-    "electron": "~17.1.0"
+    "electron": "~17.1.0",
+    "socket.io": "~4.4.1",
+    "ws": "~8.5.0",
+    "axios": "~0.26.0",
+    "electron-updater": "~4.6.5",
+    "electron-is-dev": "~2.0.0"
   },
-  "devDependencies": {"sos-plugin-types":"workspace:*"}
+  "devDependencies": {
+    "sos-plugin-types": "workspace:*",
+    "@types/ws": "~8.5.1"
+  }
 }
