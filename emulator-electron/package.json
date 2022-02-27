@@ -1,0 +1,23 @@
+{
+  "name": "sos-emulator-electron",
+  "version": "0.0.1",
+  "description": "The electron wrapper for the SOS emulator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SilentEchoUK/sos-packages.git"
+  },
+  "author": "SilentEcho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SilentEchoUK/sos-packages/issues"
+  },
+  "homepage": "https://github.com/SilentEchoUK/sos-packages#readme",
+  "dependencies": {
+    "electron": "~17.1.0"
+  },
+  "devDependencies": {"sos-plugin-types":"workspace:*"}
+}
