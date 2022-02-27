@@ -1,0 +1,110 @@
+// DO NOT ADD COMMENTS IN THIS FILE.  They will be lost when the Rush tool resaves it.
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
+  "packages": [
+    {
+      "name": "@rollup/plugin-commonjs",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@rollup/plugin-node-resolve",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@rollup/plugin-typescript",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@tsconfig/svelte",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "axios",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "electron",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "electron-is-dev",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "electron-updater",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "fp-ts",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "localforage",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-css-only",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-livereload",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-svelte",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "rollup-plugin-terser",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "sirv-cli",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "socket.io",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "socket.io-client",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "sos-plugin-types",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "svelte",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "svelte-check",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "svelte-preprocess",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "tslib",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "typescript",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "uuid",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "ws",
+      "allowedCategories": [ "production" ]
+    }
+  ]
+}
