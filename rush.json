@@ -454,7 +454,17 @@
     //
     {
       "packageName": "sos-plugin-types",
-      "projectFolder": "sos-types",
+      "projectFolder": "types",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "sos-emulator-svelte",
+      "projectFolder": "emulator-svelte",
+      "reviewCategory": "production"
+    },
+    {
+      "packageName": "sos-emulator-electron",
+      "projectFolder": "emulator-electron",
       "reviewCategory": "production"
     }
   ]
