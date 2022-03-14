@@ -4,10 +4,13 @@ import { join } from "path";
 import { fork } from "child_process";
 import { startSOSEmulator } from "./lib/socket";
 import { URL } from "url";
+
 const log = getLogger({ filepath: "electron/main.ts" });
 
 const dev = process.env.NODE_ENV === "development";
-const iconPath = join(__dirname, "graphics", "logo.png");
+const iconPath = dev
+  ? "../emulator-svelte/public/graphics/logo.png"
+  : join(__dirname, "..", "svelte", "public", "graphics", "logo.png");
 
 log.info(`Icon: ${iconPath}`);
 
@@ -40,9 +43,7 @@ const createWindow = () => {
   });
 
   const url = new URL(
-    dev
-      ? "http://localhost:34952"
-      : `file:///${__dirname}/../svelte/public/index.html`
+    dev ? "http://localhost:34952" : `file:///${__dirname}/../svelte/index.html`
   ).toString();
 
   win.loadURL(url).catch((err) => {
@@ -62,5 +63,10 @@ const createWindow = () => {
 };
 
 app.whenReady().then(createWindow);
+
+process.on("uncaughtException", (err) => {
+  // Handle the error
+  console.error("Uncaught exception", err);
+});
 
 startSOSEmulator();

@@ -2,9 +2,15 @@
   "name": "sos-emulator-electron",
   "version": "0.0.1",
   "description": "The electron wrapper for the SOS emulator.",
-  "main": "index.js",
+  "main": "build/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dist": "electron-builder",
+    "start": "run-p -l start:svelte start:electron build:watch",
+    "start:electron": "cross-env NODE_ENV=development electron .",
+    "start:svelte": "cd ../emulator-svelte && run-s dev",
+    "build:watch": "run-s \"build -- {1} {2}\" -- -w --preserveWatchOutput"
   },
   "repository": {
     "type": "git",
@@ -17,15 +23,56 @@
   },
   "homepage": "https://github.com/SilentEchoUK/sos-packages#readme",
   "dependencies": {
-    "electron": "~17.1.0",
     "socket.io": "~4.4.1",
     "ws": "~8.5.0",
     "axios": "~0.26.0",
     "electron-updater": "~4.6.5",
-    "electron-is-dev": "~2.0.0"
+    "electron-is-dev": "~2.0.0",
+    "electron-log": "~4.4.6"
   },
   "devDependencies": {
     "sos-plugin-types": "workspace:*",
-    "@types/ws": "~8.5.1"
+    "@types/ws": "~8.5.1",
+    "@types/node": "17.0.21",
+    "electron": "~17.1.0",
+    "electron-builder": "~22.14.13",
+    "npm-run-all": "~4.1.5",
+    "cross-env": "~7.0.3"
+  },
+  "build": {
+    "productName": "SOS Emulator",
+    "appId": "sos-emulator",
+    "asar": false,
+    "nsis": {
+      "artifactName": "${productName}.${version}.${ext}"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "../emulator-svelte/public/graphics/sos-emu.ico"
+    },
+    "directories": {
+      "output": "../release/sos-emulator"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json",
+      {
+        "from": "../emulator-svelte/public/**/*",
+        "to": "svelte/**/*"
+      },
+      {
+        "from": "../common/.pnpm/**/*",
+        "to": "node_modules/**/*"
+      }
+    ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://sosemu.silentecho.eu/upload"
+      }
+    ]
   }
 }

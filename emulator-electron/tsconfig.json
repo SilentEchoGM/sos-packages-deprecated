@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../release/sos-emulator-electron",
+    "outDir": "build",
     "declaration": true,
     "composite": true,
     "declarationMap": true,
@@ -10,6 +10,8 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "target": "ES2020",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "module": "commonjs"
   }
 }

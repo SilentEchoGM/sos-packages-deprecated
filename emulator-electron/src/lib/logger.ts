@@ -1,7 +1,12 @@
 type LogLevel = "info" | "error" | "warn";
 type LogMeta = { filepath: string; [key: string]: any };
 
+import { app } from "electron";
+import { default as electronLog } from "electron-log";
+
 let maxLengthFilepath = 0;
+
+console.log("Log folder: ", app.getPath("logs"));
 
 const createLevel =
   (level: LogLevel, meta: LogMeta) =>
@@ -31,6 +36,7 @@ const createLevel =
       return ["\n", obj, "\n"];
     };
 
+    electronLog[level](...formatted, formatObj(obj));
     console[level](
       ...formatted.map((string, i) => {
         const colors = [
