@@ -23,7 +23,15 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "cross-env",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "electron",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "electron-builder",
       "allowedCategories": [ "production" ]
     },
     {
@@ -40,6 +48,10 @@
     },
     {
       "name": "localforage",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "npm-run-all",
       "allowedCategories": [ "production" ]
     },
     {
