@@ -1,4 +1,4 @@
-import type { SOS } from "../sos-plugin-types";
+import type { SOS } from "sos-plugin-types";
 import { pipe } from "fp-ts/function";
 import { array as A } from "fp-ts";
 import { keys } from "fp-ts/Record";

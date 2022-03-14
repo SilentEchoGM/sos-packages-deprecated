@@ -11,7 +11,7 @@
   import Toggle from "./Toggle.svelte";
   import { v4 } from "uuid";
   import { getPlayerStore } from "../packetFactory/utils/getPlayerStore";
-  import { sosStatFeedEvents } from "../types/sosConsts";
+  import { sosStatFeedEvents } from "sos-plugin-types";
 
   const log = getLogger({
     filepath: "svelte/src/lib/frontend/components/Settings.svelte",

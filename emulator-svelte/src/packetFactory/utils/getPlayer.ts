@@ -1,4 +1,4 @@
-import type { SOS } from "../sos-plugin-types";
+import type { SOS } from "sos-plugin-types";
 import { record as R, array as A, ord as Ord } from "fp-ts";
 import { pipe } from "fp-ts/function";
 import { getLocationAndRotation } from "./getLocationAndRotation";
