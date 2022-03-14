@@ -66,3 +66,11 @@ common/autoinstallers/*/.npmrc
 
 # Heft
 .heft
+
+*.tsbuildinfo
+
+# Staging folders for packaging the electron app
+common/predist*
+
+release/sos-emulator/win-unpacked/*
+types/dist/*
