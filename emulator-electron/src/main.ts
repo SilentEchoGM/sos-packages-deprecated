@@ -2,7 +2,7 @@ import { app, BrowserWindow } from "electron";
 import { getLogger } from "./lib/logger";
 import { join } from "path";
 import { fork } from "child_process";
-import { startSOSEmulator } from "./lib/socket";
+import { startSocketIOListening } from "./lib/socket";
 import { URL } from "url";
 
 const log = getLogger({ filepath: "electron/main.ts" });
@@ -31,7 +31,7 @@ const createWindow = () => {
     width: 455,
     height: 820,
     webPreferences: {
-      devTools: dev,
+      devTools: true,
       contextIsolation: false,
       nodeIntegration: true,
     },
@@ -43,7 +43,9 @@ const createWindow = () => {
   });
 
   const url = new URL(
-    dev ? "http://localhost:34952" : `file:///${__dirname}/../svelte/index.html`
+    dev
+      ? "http://localhost:34952"
+      : `file:///${__dirname}/../../svelte/index.html`
   ).toString();
 
   win.loadURL(url).catch((err) => {
@@ -69,4 +71,4 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught exception", err);
 });
 
-startSOSEmulator();
+startSocketIOListening();

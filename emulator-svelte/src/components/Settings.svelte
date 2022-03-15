@@ -7,6 +7,7 @@
     players,
     stat,
     target,
+    wssOpen,
   } from "../stores";
   import Toggle from "./Toggle.svelte";
   import { v4 } from "uuid";
@@ -65,6 +66,8 @@
       target.set("none");
       players.set(getPlayerStore());
     }}>Reset all values</button>
+
+  <span>Enable Websocket Server:</span><Toggle bind:checked={$wssOpen} />
 
   {#each Object.keys($matchSettings) as setting}
     <span>{setting}</span>

@@ -30,6 +30,6 @@
     "sirv-cli": "^2.0.0",
     "uuid": "^8.3.2",
     "socket.io-client": "~4.4.1",
-    "sos-plugin-types": "workspace:*"
+    "sos-plugin-types": "1.0.0"
   }
 }

@@ -13,13 +13,14 @@
     players,
     stat,
     target,
+    wssOpen,
   } from "./stores";
   import { pipe } from "fp-ts/lib/function";
   import { record as R } from "fp-ts";
   import { trivial } from "fp-ts/Ord";
   import localForage from "localforage";
-  import type { SOS } from "./types/sosPluginEvents";
-
+  import type { SOS } from "sos-plugin-types";
+  import { get } from "svelte/store";
   const log = getLogger({ filepath: "svelte/src/routes/index.svelte" });
 
   const sendEvent = (type: keyof PacketFactory) => {
@@ -61,6 +62,18 @@
     $socket = { channel: "send-packet", data: packet };
   };
 
+  $: if ($socket.channel === "wss-closed") {
+    $wssOpen = false;
+  } else if ($socket.channel === "wss-open") {
+    $wssOpen = true;
+  }
+
+  $: if ($wssOpen) {
+    socket.set({ channel: "open-wss", data: null });
+  } else {
+    socket.set({ channel: "close-wss", data: null });
+  }
+
   console.log($players, $matchSettings, $matchBoolSettings);
 
   onMount(async () => {
@@ -82,6 +95,9 @@
   });
 </script>
 
+<svelte:head>
+  <title>SOS Emulator</title>
+</svelte:head>
 <div class="container">
   <div class="column">
     <h3>Match Settings</h3>

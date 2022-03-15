@@ -37,22 +37,22 @@ const createLevel =
     };
 
     electronLog[level](...formatted, formatObj(obj));
-    console[level](
-      ...formatted.map((string, i) => {
-        const colors = [
-          "\x1b[1m",
-          string.includes("error")
-            ? "\x1b[31m"
-            : string.includes("warn")
-            ? "\x1b[33m"
-            : "\x1b[32m",
-          "\x1b[1m",
-        ];
+    // console[level](
+    //   ...formatted.map((string, i) => {
+    //     const colors = [
+    //       "\x1b[1m",
+    //       string.includes("error")
+    //         ? "\x1b[31m"
+    //         : string.includes("warn")
+    //         ? "\x1b[33m"
+    //         : "\x1b[32m",
+    //       "\x1b[1m",
+    //     ];
 
-        return (colors[i] ?? "") + string + "\x1b[0m";
-      }),
-      ...formatObj(obj)
-    );
+    //     return (colors[i] ?? "") + string + "\x1b[0m";
+    //   }),
+    //   ...formatObj(obj)
+    // );
   };
 
 export const getLogger = (meta: LogMeta) => {

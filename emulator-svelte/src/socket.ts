@@ -1,15 +1,14 @@
 import { getLogger } from "./logger";
 import { io, Socket } from "socket.io-client";
-import { writable } from "svelte/store";
+import { type Writable, writable } from "svelte/store";
 
 type SocketIOPayload = { channel: string; data: any };
 
 const log = getLogger({ filepath: "svelte/src/lib/frontend/socket.ts" });
 
-type SocketStore = {
+type SocketStore = Omit<Writable<SocketIOPayload>, "update"> & {
   set: ({ channel, data }: SocketIOPayload) => void;
   send: ({ channel, data }: SocketIOPayload) => void;
-  subscribe: ReturnType<typeof writable>["subscribe"];
   socket: Socket;
   get connected(): boolean;
   history: SocketIOPayload[];
@@ -46,7 +45,7 @@ export const createSocketStore = (): SocketStore => {
   });
 
   socket.onAny((channel, data) => {
-    const payload = { channel, data };
+    const payload = { channel, data } as SocketIOPayload;
     set(payload);
     pushToHistory(payload);
   });

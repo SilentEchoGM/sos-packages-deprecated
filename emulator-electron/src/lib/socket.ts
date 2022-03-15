@@ -7,6 +7,13 @@ import type { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 interface FrontendToBackendEvents {
   "send-packet": (packet: SOS.Packet) => void;
+  "close-wss": () => void;
+  "open-wss": () => void;
+}
+
+interface BackendToFrontendEvents {
+  "wss-closed": () => void;
+  "wss-open": () => void;
 }
 
 const log = getLogger({ filepath: "svelte/src/lib/backend/socket.ts" });
@@ -21,8 +28,8 @@ httpServer.on("listening", () => {
 });
 
 export const ioBackend = new Server<
-  DefaultEventsMap,
   FrontendToBackendEvents,
+  BackendToFrontendEvents,
   DefaultEventsMap
 >(httpServer, {
   cors: {
@@ -34,12 +41,13 @@ ioBackend.on("listening", () => {
   log.info("ioBackend now listening.");
 });
 
-const startListening = () => {
+export const startSocketIOListening = () => {
   log.info("Trying to start the HTTP Server listening");
-  httpServer.listen(34001);
+  httpServer.listen({
+    port: 34001,
+    ipv6Only: false,
+  });
 };
-
-startListening();
 
 const reconnectTimeout = 500;
 let reconnectTries = 0;
@@ -58,7 +66,7 @@ httpServer.on("error", (err: Record<string, any>) => {
 
     if (reconnectTimer) clearTimeout(reconnectTimer);
     if (reconnectTries > 20)
-      reconnectTimer = setTimeout(startListening, timeout);
+      reconnectTimer = setTimeout(startSocketIOListening, timeout);
 
     return;
   }
@@ -70,9 +78,10 @@ httpServer.on("error", (err: Record<string, any>) => {
   });
 });
 
-let sosEmulator: WebSocket.Server;
+let sosEmulator: WebSocket.Server | null;
 
-export const startSOSEmulator = (port: number = 49122) => {
+export const startWSS = (port: number = 49122) => {
+  log.info("Starting SOS emulator");
   const wss = new WebSocketServer({
     port,
   });
@@ -85,10 +94,19 @@ export const startSOSEmulator = (port: number = 49122) => {
 
   wss.on("error", (error) => {
     log.error("Error with SOS Emulator WSS", { error });
-    setTimeout(startSOSEmulator, 200);
+    setTimeout(startWSS, 200);
   });
 
-  sosEmulator = wss;
+  wss.on("listening", () => {
+    sosEmulator = wss;
+    log.info("WSS listening");
+  });
+
+  wss.on("close", () => {
+    sosEmulator = null;
+    log.info("WSS closed");
+  });
+
   return wss;
 };
 
@@ -100,6 +118,29 @@ ioBackend.on("connection", (socket) => {
     if (!sosEmulator) return;
     sosEmulator.clients.forEach((client) => {
       client.send(JSON.stringify(packet));
+    });
+  });
+
+  socket.on("close-wss", () => {
+    log.info("close-wss received");
+
+    if (!sosEmulator) return log.info("WSS already closed");
+
+    [...sosEmulator.clients].map((client) => client.close());
+    sosEmulator.close(() => log.info("Closed WSS"));
+
+    sosEmulator = null;
+  });
+
+  socket.on("open-wss", () => {
+    log.info("open-wss received");
+
+    startWSS();
+    sosEmulator?.on("close", () => {
+      socket.emit("wss-closed");
+    });
+    sosEmulator?.on("listening", () => {
+      socket.emit("wss-open");
     });
   });
 });
