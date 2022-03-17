@@ -35,6 +35,11 @@ export const startPlayback = async (
   }
 
   const playPacket = (i: number, packets: DatedPacket[]) => {
+    if (i === packets.length) {
+      socket.emit("playback-stopped");
+      return;
+    }
+
     if (!socketManager.wss) {
       log.error(
         `socketManager.wss is null, unable to send packet #${i}. Stopping playback.`
