@@ -72,7 +72,6 @@ common/autoinstallers/*/.npmrc
 # Staging folders for packaging the electron app
 common/predist*
 
-release/sos-emulator/*
-!release/sos-emulator/*.exe
+
 
 types/dist/*
