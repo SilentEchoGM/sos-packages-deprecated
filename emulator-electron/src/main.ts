@@ -28,7 +28,7 @@ if (!dev) {
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 455,
+    width: 935,
     height: 820,
     webPreferences: {
       devTools: true,
