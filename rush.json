@@ -458,6 +458,11 @@
       "reviewCategory": "production"
     },
     {
+      "packageName": "sos-emulator-types",
+      "projectFolder": "emulator-types",
+      "reviewCategory": "production"
+    },
+    {
       "packageName": "sos-emulator-svelte",
       "projectFolder": "emulator-svelte",
       "reviewCategory": "production"

@@ -15,6 +15,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@syncedstore/core",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "@syncedstore/svelte",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@tsconfig/svelte",
       "allowedCategories": [ "production" ]
     },
@@ -95,6 +103,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "sos-emulator-types",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "sos-plugin-types",
       "allowedCategories": [ "production" ]
     },
@@ -104,6 +116,14 @@
     },
     {
       "name": "svelte-check",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "svelte-fsm",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "svelte-knobby",
       "allowedCategories": [ "production" ]
     },
     {
@@ -124,6 +144,14 @@
     },
     {
       "name": "ws",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "y-indexeddb",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "yjs",
       "allowedCategories": [ "production" ]
     }
   ]
