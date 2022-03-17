@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "run-s -l build:electron",
     "build:electron": "tsc",
-    "dist": "cross-env DEBUG=electron-builder electron-builder",
+    "dist": "electron-builder",
     "start": "run-s build && run-p -l start:svelte start:electron",
     "start:electron": "cross-env NODE_ENV=development electron .",
     "start:svelte": "cd ../emulator-svelte && run-s dev",
@@ -58,7 +58,7 @@
       "icon": "../svelte/graphics/sos-emu.ico"
     },
     "directories": {
-      "output": "../../../release/sos-emulator"
+      "output": "../../release/sos-emulator/${version}"
     },
     "files": [
       "build/**/*",
