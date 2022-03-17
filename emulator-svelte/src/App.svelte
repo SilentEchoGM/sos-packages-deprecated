@@ -1,129 +1,83 @@
 <script lang="ts">
-  import SendPacketButton from "./components/SendPacketButton.svelte";
-  import Settings from "./components/Settings.svelte";
-  import { getLogger } from "./logger";
-  import { keys } from "fp-ts/Record";
-  import { onDestroy, onMount } from "svelte";
-  import { packetFactory } from "./packetFactory";
-  import type { PacketFactory } from "./types";
-  import { socket } from "./socket";
-  import {
-    matchBoolSettings,
-    matchSettings,
-    players,
-    stat,
-    target,
-    wssOpen,
-  } from "./stores";
-  import { pipe } from "fp-ts/lib/function";
-  import { record as R } from "fp-ts";
-  import { trivial } from "fp-ts/Ord";
-  import localForage from "localforage";
-  import type { SOS } from "sos-plugin-types";
-  import { get } from "svelte/store";
-  const log = getLogger({ filepath: "svelte/src/routes/index.svelte" });
+  import TextInput from "./components/inputs/TextInput.svelte";
+  import Panel from "./components/Panel.svelte";
+  import { Color } from "./components/color";
+  import NumberInput from "./components/inputs/NumberInput.svelte";
+  import BooleanInput from "./components/inputs/BooleanInput.svelte";
+  import CollapsiblePanel from "./components/CollapsiblePanel.svelte";
+  import { EmulatorMode, state } from "./state";
+  import { v4 } from "uuid";
+  import Player from "./components/PlayerCard.svelte";
+  import { keys } from "fp-ts/lib/Record";
+  import { onMount } from "svelte";
+  import { getPlayerStore } from "./packetFactory/utils/getPlayerStore";
+  import GameState from "./components/settings/GameState.svelte";
+  import Manual from "./components/modes/Manual.svelte";
+  import Playback from "./components/modes/Playback.svelte";
+  import Recording from "./components/modes/Recording.svelte";
+  $: console.log("state", $state, state);
 
-  const sendEvent = (type: keyof PacketFactory) => {
-    log.info("sendEvent", type);
+  onMount(() => {
+    if (keys($state.playersStore).length === 0) {
+      const playerStore = getPlayerStore();
+      for (let player in playerStore) {
+        $state.playersStore[player] = playerStore[player];
+      }
+    }
 
-    const fn = packetFactory[type];
-
-    const ids = keys($players);
-    const scorer = $players[ids[Math.floor(Math.random() * ids.length)]];
-
-    const assister = pipe(
-      $players,
-      R.filter(
-        (player) => player.id !== scorer.id && player.team === scorer.team
-      ),
-      R.collect(trivial)((_, player) => player)
-    )[Math.floor(Math.random() * 2)];
-
-    const data = {
-      ...$matchBoolSettings,
-      ...$matchSettings,
-      statType: $stat,
-      players: $players,
-      scorer: type === "game:goal_scored" ? scorer : null,
-      assister:
-        type === "game:goal_scored" && Math.random() < 0.5 ? assister : null,
-      mainTarget: type === "game:statfeed_event" ? scorer : null,
-      target: $target,
-    };
-
-    log.info("Packet data:", {
-      data,
-      raw: {
-        scorer,
-        assister,
-      },
-    });
-    const packet = fn(data);
-    $socket = { channel: "send-packet", data: packet };
-  };
-
-  $: if ($socket.channel === "wss-closed") {
-    $wssOpen = false;
-  } else if ($socket.channel === "wss-open") {
-    $wssOpen = true;
-  }
-
-  $: if ($wssOpen) {
-    socket.set({ channel: "open-wss", data: null });
-  } else {
-    socket.set({ channel: "close-wss", data: null });
-  }
-
-  console.log($players, $matchSettings, $matchBoolSettings);
-
-  onMount(async () => {
-    log.info("onMount");
-
-    //persist stores
-    localForage.getItem("players", (err, value: SOS.PlayersStore) => {
-      if (!value) return;
-      players.set(value);
-    });
-    localForage.getItem("bools", (err, value: any) => {
-      if (!value) return;
-      matchBoolSettings.set(value);
-    });
-    localForage.getItem("settings", (err, value: any) => {
-      if (!value) return;
-      matchSettings.set(value);
-    });
+    if (!$state.emulatorState.mode)
+      $state.emulatorState.mode = EmulatorMode.manual;
   });
 </script>
 
-<svelte:head>
-  <title>SOS Emulator</title>
-</svelte:head>
-<div class="container">
-  <div class="column">
-    <h3>Match Settings</h3>
+<CollapsiblePanel header="Emulator Controls" uiKey="emulatorModeOpen">
+  <button
+    class="mode"
+    disabled={$state.emulatorState.mode === EmulatorMode.manual}
+    on:click={() => ($state.emulatorState.mode = EmulatorMode.manual)}
+    >Manual</button>
+  <button
+    class="mode"
+    disabled={$state.emulatorState.mode === EmulatorMode.recording}
+    on:click={() => ($state.emulatorState.mode = EmulatorMode.recording)}
+    >Recording</button>
+  <button
+    class="mode"
+    disabled={$state.emulatorState.mode === EmulatorMode.playback}
+    on:click={() => ($state.emulatorState.mode = EmulatorMode.playback)}
+    >Playback</button>
 
-    <Settings />
-  </div>
-  <div class="column">
-    <h3>Send Packet</h3>
-    <div class="column-content">
-      {#each keys(packetFactory) as type}
-        <SendPacketButton {type} on:sendEvent={() => sendEvent(type)} />
+  {#if $state.emulatorState.mode === EmulatorMode.manual}
+    <Manual />
+  {/if}
+  {#if $state.emulatorState.mode === EmulatorMode.playback}
+    <Playback />
+  {/if}
+  {#if $state.emulatorState.mode === EmulatorMode.recording}
+    <Recording />
+  {/if}
+</CollapsiblePanel>
+{#if $state.emulatorState.mode === EmulatorMode.manual}
+  <GameState />
+
+  <CollapsiblePanel header="Players" uiKey="playersOpen">
+    <div class="grid players">
+      {#each keys($state.playersStore) as player}
+        <Player {player} />
+      {:else}
+        ...
       {/each}
     </div>
-  </div>
-</div>
+  </CollapsiblePanel>
+{/if}
 
 <style>
-  .column {
-    width: 200px;
-    height: 100%;
-    padding: 0;
-    background-color: #636564;
+  button.mode:disabled {
+    background-color: var(--neutral);
+    color: black;
   }
-
-  .container {
-    display: flex;
-    justify-content: space-between;
+  .players {
+    grid-template-columns: repeat(2, 26em);
+    grid-auto-flow: dense;
   }
 </style>

@@ -30,6 +30,13 @@
     "sirv-cli": "^2.0.0",
     "uuid": "^8.3.2",
     "socket.io-client": "~4.4.1",
-    "sos-plugin-types": "1.0.0"
+    "sos-plugin-types": "1.0.0",
+    "svelte-knobby": "^0.3.4",
+    "svelte-fsm": "~1.1.2",
+    "@syncedstore/core": "~0.3.7",
+    "@syncedstore/svelte": "~0.3.6",
+    "yjs": "~13.5.28",
+    "y-indexeddb": "~9.0.7",
+    "sos-emulator-types": "1.0.0"
   }
 }

@@ -64,3 +64,6 @@ export const players: Writable<SOS.PlayersStore> = createPersistentStore(
 export const gameId = createPersistentStore(v4(), "gameId");
 
 export const wssOpen = writable(false);
+export const recording = writable(false);
+export const playback = writable(false);
+export const playbackGameId = writable("");
