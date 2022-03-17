@@ -17,7 +17,10 @@ export const handlers = (
 ) => {
   const sendPacketHandler = (packet: SOS.Packet) => {
     log.info('"send-packet" received.', packet);
-    if (!socketManager.wss) return;
+    if (!socketManager.wss) {
+      log.info("unable to send packet");
+      return;
+    }
     socketManager.wss.clients.forEach((client) => {
       client.send(JSON.stringify(packet));
     });
