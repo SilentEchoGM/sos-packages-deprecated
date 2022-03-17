@@ -1,6 +1,16 @@
 {
   "i18n-ally.localesPaths": ["release/sos-emulator/win-unpacked/locales"],
-  "cSpell.words": ["bools", "Indexeddb", "rushx", "syncedstore"],
+  "cSpell.words": [
+    "bools",
+    "buildable",
+    "Indexeddb",
+    "nonbrowser",
+    "noreply",
+    "npmjs",
+    "rushx",
+    "subfolders",
+    "syncedstore"
+  ],
   "files.exclude": {
     "**/.git": false,
     "**/.svn": true,
@@ -10,5 +20,6 @@
     "**/Thumbs.db": true,
     "**/.svelte-kit": true,
     "**/node_modules": false
-  }
+  },
+  "cSpell.ignoreWords": ["pnpmfile"]
 }
