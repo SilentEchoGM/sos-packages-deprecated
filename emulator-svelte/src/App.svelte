@@ -1,12 +1,6 @@
 <script lang="ts">
-  import TextInput from "./components/inputs/TextInput.svelte";
-  import Panel from "./components/Panel.svelte";
-  import { Color } from "./components/color";
-  import NumberInput from "./components/inputs/NumberInput.svelte";
-  import BooleanInput from "./components/inputs/BooleanInput.svelte";
   import CollapsiblePanel from "./components/CollapsiblePanel.svelte";
   import { EmulatorMode, state } from "./state";
-  import { v4 } from "uuid";
   import Player from "./components/PlayerCard.svelte";
   import { keys } from "fp-ts/lib/Record";
   import { onMount } from "svelte";
@@ -15,54 +9,69 @@
   import Manual from "./components/modes/Manual.svelte";
   import Playback from "./components/modes/Playback.svelte";
   import Recording from "./components/modes/Recording.svelte";
-  $: console.log("state", $state, state);
+  import { socket } from "./socket";
 
   onMount(() => {
-    if (keys($state.playersStore).length === 0) {
+    if (keys($state.players).length === 0) {
       const playerStore = getPlayerStore();
       for (let player in playerStore) {
-        $state.playersStore[player] = playerStore[player];
+        $state.players[player] = playerStore[player];
       }
     }
 
-    if (!$state.emulatorState.mode)
-      $state.emulatorState.mode = EmulatorMode.manual;
+    if (!$state.emulator.mode) $state.emulator.mode = EmulatorMode.manual;
   });
+
+  $: if ($socket.channel === "wss-port-busy") {
+    $state.ui.wssError = true;
+  }
+
+  $: if ($socket.channel === "wss-open") {
+    $state.ui.wssError = false;
+  }
+
+  $: if ($socket.channel === "recording-no-server") {
+    $state.ui.recordingListenerError = true;
+  }
+
+  $: if ($socket.channel === "recording-started") {
+    $state.ui.recordingListenerError = false;
+  }
 </script>
 
 <CollapsiblePanel header="Emulator Controls" uiKey="emulatorModeOpen">
   <button
     class="mode"
-    disabled={$state.emulatorState.mode === EmulatorMode.manual}
-    on:click={() => ($state.emulatorState.mode = EmulatorMode.manual)}
+    disabled={$state.emulator.mode === EmulatorMode.manual}
+    on:click={() => ($state.emulator.mode = EmulatorMode.manual)}
     >Manual</button>
   <button
     class="mode"
-    disabled={$state.emulatorState.mode === EmulatorMode.recording}
-    on:click={() => ($state.emulatorState.mode = EmulatorMode.recording)}
+    disabled={$state.emulator.mode === EmulatorMode.recording}
+    on:click={() => ($state.emulator.mode = EmulatorMode.recording)}
     >Recording</button>
   <button
     class="mode"
-    disabled={$state.emulatorState.mode === EmulatorMode.playback}
-    on:click={() => ($state.emulatorState.mode = EmulatorMode.playback)}
+    disabled={$state.emulator.mode === EmulatorMode.playback}
+    on:click={() => ($state.emulator.mode = EmulatorMode.playback)}
     >Playback</button>
 
-  {#if $state.emulatorState.mode === EmulatorMode.manual}
+  {#if $state.emulator.mode === EmulatorMode.manual}
     <Manual />
   {/if}
-  {#if $state.emulatorState.mode === EmulatorMode.playback}
+  {#if $state.emulator.mode === EmulatorMode.playback}
     <Playback />
   {/if}
-  {#if $state.emulatorState.mode === EmulatorMode.recording}
+  {#if $state.emulator.mode === EmulatorMode.recording}
     <Recording />
   {/if}
 </CollapsiblePanel>
-{#if $state.emulatorState.mode === EmulatorMode.manual}
+{#if $state.emulator.mode === EmulatorMode.manual}
   <GameState />
 
   <CollapsiblePanel header="Players" uiKey="playersOpen">
     <div class="grid players">
-      {#each keys($state.playersStore) as player}
+      {#each keys($state.players) as player}
         <Player {player} />
       {:else}
         ...
