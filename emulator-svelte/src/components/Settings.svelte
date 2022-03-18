@@ -37,8 +37,6 @@
     "touches",
     "cartouches",
   ];
-
-  $: console.log("gameId", $gameId);
 </script>
 
 <div class="settings-container column-content">
