@@ -95,7 +95,7 @@ const execCommand = async (
   try {
     const { stdout, stderr } = await runCmd(command);
     console.log("\n\nOut:\n\t", stdout);
-    console.log("\n\nErr:\n\t", stderr);
+    if (stderr) console.log("\n\nErr:\n\t", stderr);
   } catch (err) {
     console.error(err);
   }
