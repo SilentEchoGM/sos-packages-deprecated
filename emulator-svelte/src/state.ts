@@ -27,6 +27,8 @@ export type UIState = {
   gameStateOpen: boolean;
   playersOpen: boolean;
   emulatorModeOpen: boolean;
+  wssError: boolean;
+  recordingListenerError: boolean;
 };
 
 export enum EmulatorMode {
@@ -37,17 +39,24 @@ export enum EmulatorMode {
 
 export type EmulatorState = {
   mode: EmulatorMode;
-  selectedGameId: string | null;
   recording: boolean;
   playing: boolean;
+};
+
+export type PlaybackState = {
+  currentFrame: number;
+  length: number;
+  gameId: string | null;
   listOfGameIds: string[];
+  loaded: boolean;
 };
 
 const rawState = syncedStore({
-  emulatorState: {} as EmulatorState,
-  gameState: {} as GameState,
-  playersStore: {} as SOS.PlayersStore,
+  emulator: {} as EmulatorState,
+  game: {} as GameState,
+  players: {} as SOS.PlayersStore,
   ui: {} as UIState,
+  playback: {} as PlaybackState,
 });
 
 export const state = svelteSyncedStore(rawState);

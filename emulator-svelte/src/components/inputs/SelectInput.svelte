@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   import { Color } from "../color";
 
@@ -9,6 +9,8 @@
   export let code = false;
   export let options: string[] = [];
 
+  const dispatch = createEventDispatcher();
+
   onMount(() => {
     if (!value) value = options?.[0] ?? "test";
   });
@@ -16,18 +18,22 @@
   let expanded = false;
   let selectEl: HTMLDivElement;
   const clickHandler = (event) => {
-    console.log("clickHandler");
-
     if (!(event.target instanceof Element)) return;
 
     if (event.target.id !== "click-target") {
-      console.log("Not click target, removing listener");
       expanded = false;
       document.removeEventListener("click", clickHandler);
 
       return;
     }
   };
+
+  let previous = value;
+
+  $: if (value !== previous) {
+    previous = value;
+    dispatch("change", value);
+  }
 </script>
 
 <label style:font-family={code ? "OpenDyslexicMono" : ""} for={label}
@@ -39,10 +45,8 @@
       expanded = !expanded;
 
       if (expanded) {
-        console.log("Adding click handler");
         document.addEventListener("click", clickHandler);
       } else {
-        console.log("removing click handler");
         document.removeEventListener("click", clickHandler);
       }
     }}
@@ -62,7 +66,6 @@
           on:click={() => {
             value = option;
             expanded = false;
-            console.log("Removing listener");
             document.removeEventListener("click", clickHandler);
           }}>
           {option}

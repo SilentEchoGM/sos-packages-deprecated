@@ -3,21 +3,23 @@
   import { tweened } from "svelte/motion";
   import { state } from "../state";
   import { Color } from "./color";
+  import EditPlayer from "./EditPlayer.svelte";
   export let player: SOS.Player["id"];
 
-  let color = $state.playersStore[player].team ? Color.orange : Color.blue;
+  let color = $state.players[player].team ? Color.orange : Color.blue;
 
   let rowNumber = 1;
+  let editing = false;
 
-  const boostStore = tweened($state.playersStore[player].boost, {
+  const boostStore = tweened($state.players[player].boost, {
     duration: 0,
   });
 
-  $: $state.playersStore[player].boost = Math.floor($boostStore);
+  $: $state.players[player].boost = Math.floor($boostStore);
   $: rowNumber =
     color === Color.blue
-      ? $state.playersStore[player].shortcut + 1
-      : $state.playersStore[player].shortcut % 3;
+      ? $state.players[player].shortcut + 1
+      : $state.players[player].shortcut % 3;
 </script>
 
 <div
@@ -26,10 +28,10 @@
   style:grid-row-start={rowNumber}
   style:border-color={color === Color.orange ? "var(--orange)" : "var(--blue)"}>
   <span
-    >Name: <strong>{$state.playersStore[player].name}</strong><span class="fade"
-      >_{$state.playersStore[player].shortcut}</span
+    >Name: <strong>{$state.players[player].name}</strong><span class="fade"
+      >_{$state.players[player].shortcut}</span
     ></span>
-  <span>Boost: <strong>{$state.playersStore[player].boost}</strong></span>
+  <span>Boost: <strong>{$state.players[player].boost}</strong></span>
   <div class="break" />
   <div class="container">
     <button
@@ -45,11 +47,21 @@
         boostStore.set(100);
       }}>Give Can</button>
   </div>
-  <button
-    on:click={() => {
-      $state.gameState.target = player;
-    }}>Set as Target</button>
+  <div class="container">
+    <button
+      on:click={() => {
+        $state.game.target = player;
+      }}>Set as Target</button>
+    <button
+      on:click={() => {
+        editing = true;
+      }}>Edit Player</button>
+  </div>
 </div>
+
+{#if editing}
+  <EditPlayer {player} stopEditing={() => (editing = false)} />
+{/if}
 
 <style>
   span {

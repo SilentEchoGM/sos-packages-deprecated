@@ -15,48 +15,48 @@
   <div class="grid">
     <div class="row" id="line1">
       <TextInput
-        bind:value={$state.gameState.match_guid}
+        bind:value={$state.game.match_guid}
         label={"match_guid"}
         code />
-      <button on:click={() => ($state.gameState.match_guid = v4())}
+      <button on:click={() => ($state.game.match_guid = v4())}
         >New Game ID</button>
     </div>
     <div class="row" id="line2">
       <TextInput
-        bind:value={$state.gameState.blueName}
+        bind:value={$state.game.blueName}
         label={"blueName"}
         code
         color={Color.blue} />
       <TextInput
-        bind:value={$state.gameState.orangeName}
+        bind:value={$state.game.orangeName}
         label={"orangeName"}
         code
         color={Color.orange} />
     </div>
     <div class="row" id="line3">
       <NumberInput
-        bind:value={$state.gameState.blueScore}
+        bind:value={$state.game.blueScore}
         label={"blueScore"}
         code
         color={Color.blue} />
       <NumberInput
-        bind:value={$state.gameState.orangeScore}
+        bind:value={$state.game.orangeScore}
         label={"orangeScore"}
         code
         color={Color.orange} />
     </div>
     <div class="row" id="line4">
-      <NumberInput bind:value={$state.gameState.time} label={"time"} code />
-      <BooleanInput bind:checked={$state.gameState.isOT} label={"isOT"} code />
+      <NumberInput bind:value={$state.game.time} label={"time"} code />
+      <BooleanInput bind:checked={$state.game.isOT} label={"isOT"} code />
       <BooleanInput
-        bind:checked={$state.gameState.isReplay}
+        bind:checked={$state.game.isReplay}
         label={"isReplay"}
         code />
     </div>
     <div id="line5" class="row">
-      <TextInput bind:value={$state.gameState.target} label={"target"} code />
+      <TextInput bind:value={$state.game.target} label={"target"} code />
       <SelectInput
-        bind:value={$state.gameState.statType}
+        bind:value={$state.game.statType}
         label="statType"
         options={[...sosStatFeedEvents].sort()}
         code />

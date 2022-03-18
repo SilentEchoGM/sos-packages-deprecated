@@ -10,11 +10,12 @@
   import { state } from "../../state";
   import { socket } from "../../socket";
   import { onDestroy, onMount } from "svelte";
+  import WssError from "../errors/Wss.svelte";
 
   onMount(() => {
     $socket = {
       channel: "open-wss",
-      data: {},
+      data: null,
     };
   });
 
@@ -27,12 +28,11 @@
 
     const fn = packetFactory[type];
 
-    const ids = R.keys($state.playersStore);
-    const scorer =
-      $state.playersStore[ids[Math.floor(Math.random() * ids.length)]];
+    const ids = R.keys($state.players);
+    const scorer = $state.players[ids[Math.floor(Math.random() * ids.length)]];
 
     const assister = pipe(
-      $state.playersStore,
+      $state.players,
       R.filter(
         (player) => player.id !== scorer.id && player.team === scorer.team
       ),
@@ -40,8 +40,8 @@
     )[Math.floor(Math.random() * 2)];
 
     const data = {
-      ...$state.gameState,
-      players: $state.playersStore,
+      ...$state.game,
+      players: $state.players,
       scorer: type === "game:goal_scored" ? scorer : null,
       assister:
         type === "game:goal_scored" && Math.random() < 0.5 ? assister : null,
@@ -60,6 +60,7 @@
   };
 </script>
 
+<WssError />
 <h3>Send a Packet:</h3>
 
 <div class="container">

@@ -2,15 +2,49 @@ import { getLogger } from "./logger";
 import { io, Socket } from "socket.io-client";
 import { type Writable, writable } from "svelte/store";
 import type { SOSEmulator } from "sos-emulator-types";
+import { isPacket } from "sos-plugin-types";
 
-type SocketIOFrontendToBackendPayload = {
-  channel: keyof SOSEmulator.FrontendToBackendEvents;
-  data: any;
+type SocketIOFrontendToBackendPayloadData<
+  T extends keyof SOSEmulator.FrontendToBackendEvents
+> = Parameters<SOSEmulator.FrontendToBackendEvents[T]>[0];
+
+type SocketIOFrontendToBackendPayload<
+  T extends keyof SOSEmulator.FrontendToBackendEvents
+> = {
+  channel: T;
+  data: SocketIOFrontendToBackendPayloadData<T>;
 };
 
 type SocketIOBackendToFrontendPayload = {
   channel: keyof SOSEmulator.BackendToFrontendEvents;
   data: any;
+};
+
+const isCorrectParameterType = <
+  T extends keyof SOSEmulator.FrontendToBackendEvents
+>(
+  channel: T,
+  parameter: any
+): parameter is SocketIOFrontendToBackendPayloadData<T> => {
+  if (typeof parameter === "string" && channel === "load-playback") return true;
+  if (typeof parameter === "number" && channel === "set-playback-current-frame")
+    return true;
+  if (isPacket(parameter) && channel === "send-packet") return true;
+  if (
+    !parameter &&
+    [
+      "close-wss",
+      "open-wss",
+      "start-playback",
+      "stop-playback",
+      "get-playback-library",
+      "start-recording",
+      "stop-recording",
+    ].includes(channel)
+  )
+    return true;
+
+  return false;
 };
 
 const log = getLogger({ filepath: "svelte/src/lib/frontend/socket.ts" });
@@ -19,8 +53,14 @@ type SocketStore = Pick<
   Writable<SocketIOBackendToFrontendPayload>,
   "subscribe"
 > & {
-  set: ({ channel, data }: SocketIOFrontendToBackendPayload) => void;
-  send: ({ channel, data }: SocketIOFrontendToBackendPayload) => void;
+  set: <T extends keyof SOSEmulator.FrontendToBackendEvents>({
+    channel,
+    data,
+  }: SocketIOFrontendToBackendPayload<T>) => void;
+  send: <T extends keyof SOSEmulator.FrontendToBackendEvents>({
+    channel,
+    data,
+  }: SocketIOFrontendToBackendPayload<T>) => void;
   socket: Socket;
   get connected(): boolean;
   history: SocketIOBackendToFrontendPayload[];
@@ -50,9 +90,17 @@ export const createSocketStore = (): SocketStore => {
     history.push(...newHistory);
   };
 
-  const send = ({ channel, data }: SocketIOFrontendToBackendPayload) => {
+  const send = ({
+    channel,
+    data,
+  }: SocketIOFrontendToBackendPayload<typeof channel>) => {
     log.verbose("Sending socket message", { channel, data });
-    socket.emit(channel, data);
+    if (!isCorrectParameterType(channel, data)) {
+      log.warn("Incorrect call to api", { channel, data });
+      return;
+    } else {
+      socket.emit(channel, data);
+    }
   };
 
   socket.on("connect", () => {

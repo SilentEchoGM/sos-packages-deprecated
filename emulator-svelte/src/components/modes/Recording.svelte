@@ -3,37 +3,44 @@
 
   import { socket } from "../../socket";
   import { state } from "../../state";
+  import ListenerError from "../errors/Listener.svelte";
 
   $: if ($socket.channel === "recording-started")
-    $state.emulatorState.recording = true;
+    $state.emulator.recording = true;
   $: if ($socket.channel === "recording-stopped")
-    $state.emulatorState.recording = false;
+    $state.emulator.recording = false;
 
   onMount(() => {
     $socket = {
       channel: "close-wss",
-      data: {},
+      data: null,
     };
   });
 </script>
 
+<ListenerError />
+
 <div class="grid">
-  {#if $state.emulatorState.recording}
+  {#if $state.emulator.recording}
     <button
       on:click={() => {
         $socket = {
           channel: "stop-recording",
-          data: {},
+          data: null,
         };
       }}>Stop Recording</button>
   {:else}
     <button
+      style:background-color={$state.ui.recordingListenerError
+        ? "var(--maroon)"
+        : ""}
       on:click={() => {
         $socket = {
           channel: "start-recording",
-          data: {},
+          data: null,
         };
-      }}>Start Recording</button>
+      }}
+      >{$state.ui.recordingListenerError ? "Retry" : "Start Recording"}</button>
   {/if}
 </div>
 
