@@ -106,6 +106,18 @@
         "progress": "^2.0.3",
         "semver": "^6.2.0",
         "sumchecker": "^3.0.1"
+      },
+      "dependencies": {
+        "fs-extra": {
+          "version": "8.1.0",
+          "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz",
+          "integrity": "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==",
+          "requires": {
+            "graceful-fs": "^4.2.0",
+            "jsonfile": "^4.0.0",
+            "universalify": "^0.1.0"
+          }
+        }
       }
     },
     "@electron/universal": {
@@ -281,7 +293,7 @@
     },
     "@rush-temp/sos-emulator-electron": {
       "version": "file:projects/sos-emulator-electron.tgz",
-      "integrity": "sha512-UKrhAJhYwa/L/W3UFp4sBhCjyEDdLkqSeIxy/uxmmxpbeOAv7rgSdXVHv93TJh6j/O3DpllG4HJkPSzbUbE+gg==",
+      "integrity": "sha512-OxmYeLkbo5CScYabGBpWx1rZ6b8TfFtNFv7PzewoQru2sQ7A6NAkXNAkKu4n9WFyfPAXuJxI9dzvRUwx/S5CGA==",
       "requires": {
         "@types/node": "17.0.21",
         "@types/ws": "~8.5.1",
@@ -294,6 +306,7 @@
         "electron-log": "~4.4.6",
         "electron-updater": "~4.6.5",
         "fp-ts": "^2.11.8",
+        "fs-extra": "~10.0.1",
         "npm-run-all": "~4.1.5",
         "socket.io": "~4.4.1",
         "typescript": "^4.0.0",
@@ -340,7 +353,11 @@
     },
     "@rush-temp/sos-plugin-types": {
       "version": "file:projects/sos-plugin-types.tgz",
-      "integrity": "sha512-jCTW1VuOWxlWQ5Zj/nyqDiophNWJiikFqKWBBlMRKbgg/toar/fgkCz7KzxoVv3IpRdEF262s/6LAedVSoEvMg=="
+      "integrity": "sha512-z7X4PNCNoZDpazAf1Kkd4gtml7QJWZkKcLtxxMmKtMau5dcNIfruBCybUl+ALnXywz8hYHfv7jcXxOIXdus/vg==",
+      "requires": {
+        "fp-ts": "^2.11.8",
+        "typescript": "^4.0.0"
+      }
     },
     "@sindresorhus/is": {
       "version": "0.14.0",
@@ -1808,13 +1825,29 @@
       "integrity": "sha512-GhYlNKkCOfdjp71ocdtyaQGoqCswEoWDJLRr+2jClnBBq2dnSOtd6QxmJdALq8UhfqCyZZ0f0lxadU4OhwY9nw=="
     },
     "fs-extra": {
-      "version": "8.1.0",
-      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-8.1.0.tgz",
-      "integrity": "sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==",
+      "version": "10.0.1",
+      "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-10.0.1.tgz",
+      "integrity": "sha512-NbdoVMZso2Lsrn/QwLXOy6rm0ufY2zEOKCDzJR/0kBsb0E6qed0P3iYK+Ath3BfvXEeu4JhEtXLgILx5psUfag==",
       "requires": {
         "graceful-fs": "^4.2.0",
-        "jsonfile": "^4.0.0",
-        "universalify": "^0.1.0"
+        "jsonfile": "^6.0.1",
+        "universalify": "^2.0.0"
+      },
+      "dependencies": {
+        "jsonfile": {
+          "version": "6.1.0",
+          "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
+          "integrity": "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==",
+          "requires": {
+            "graceful-fs": "^4.1.6",
+            "universalify": "^2.0.0"
+          }
+        },
+        "universalify": {
+          "version": "2.0.0",
+          "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.0.tgz",
+          "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ=="
+        }
       }
     },
     "fs.realpath": {

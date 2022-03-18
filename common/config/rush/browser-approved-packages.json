@@ -63,6 +63,14 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "fs-extra",
+      "allowedCategories": [ "production" ]
+    },
+    {
+      "name": "is-port-reachable",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "localforage",
       "allowedCategories": [ "production" ]
     },
