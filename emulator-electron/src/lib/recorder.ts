@@ -1,18 +1,21 @@
-import { SOS } from "sos-plugin-types";
+import {
+  DatedPacket,
+  isDatedPacket,
+  ordDatedPacket,
+  SOS,
+} from "sos-plugin-types";
 import * as fs from "fs-extra";
 import { join } from "path";
 import { app } from "electron";
 import { getLogger } from "./logger";
-import { identity, pipe } from "fp-ts/function";
+import { pipe } from "fp-ts/function";
 import {
   taskEither as TE,
   task as T,
   array as A,
   json as J,
-  either as E,
   option as O,
 } from "fp-ts";
-import { DatedPacket, isDatedPacket, ordDatedPacket } from "./DatedPacket";
 
 const log = getLogger({ filepath: "emulator-electron/src/lib/recorder.ts" });
 

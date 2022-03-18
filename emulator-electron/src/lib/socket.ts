@@ -4,6 +4,8 @@ import http from "http";
 import type { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { handlers } from "./socketHandlers";
 import { SOSEmulator } from "sos-emulator-types";
+import { socketManager } from "./socketManager";
+import { createPlaybackManager } from "./playback";
 
 export const log = getLogger({ filepath: "svelte/src/lib/backend/socket.ts" });
 
@@ -69,6 +71,11 @@ httpServer.on("error", (err: Record<string, any>) => {
 
 ioBackend.on("connection", (socket) => {
   log.info("Client connected to ioBackend.", { ...socket.handshake.query });
+  socketManager.frontend = socket;
+
+  socket.on("disconnect", () => {
+    socketManager.frontend = null;
+  });
 
   const {
     sendPacketHandler,
@@ -79,6 +86,8 @@ ioBackend.on("connection", (socket) => {
     stopPlaybackHandler,
     openWSSHandler,
     getPlaybackLibraryHandler,
+    setPlaybackCurrentFrameHandler,
+    loadPlaybackHandler,
   } = handlers(socket);
 
   socket.on("send-packet", sendPacketHandler);
@@ -86,6 +95,8 @@ ioBackend.on("connection", (socket) => {
   socket.on("open-wss", openWSSHandler);
   socket.on("start-playback", startPlaybackHandler);
   socket.on("stop-playback", stopPlaybackHandler);
+  socket.on("load-playback", loadPlaybackHandler);
+  socket.on("set-playback-current-frame", setPlaybackCurrentFrameHandler);
   socket.on("get-playback-library", getPlaybackLibraryHandler);
   socket.on("start-recording", startRecordingHandler);
   socket.on("stop-recording", stopRecordingHandler);

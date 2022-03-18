@@ -1,7 +1,8 @@
 import { SOS } from "sos-plugin-types";
-import { socketManager, startListener, startWSS } from "./wss";
+import { startRecordingListener, startWSS } from "./wss";
+import { socketManager } from "./socketManager";
 import { log } from "./socket";
-import { startPlayback, stopPlayback } from "./playback";
+import { createPlaybackManager } from "./playback";
 import { Socket } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { getListOfPlaybackGames } from "./recorder";
@@ -15,6 +16,8 @@ export const handlers = (
     any
   >
 ) => {
+  const playbackManager = createPlaybackManager(socket);
+
   const sendPacketHandler = (packet: SOS.Packet) => {
     log.info('"send-packet" received.', packet);
     if (!socketManager.wss) {
@@ -47,28 +50,24 @@ export const handlers = (
     }
   };
 
-  const stopRecordingHandler = () => {
-    log.info("stop-recording");
-    socketManager.ws?.close();
-    socket.emit("recording-stopped");
-  };
-
-  const startRecordingHandler = () => {
-    log.info("start-recording");
-    startListener(socket);
-    socket.emit("recording-started");
+  const startPlaybackHandler = () => {
+    log.info("start-playback");
+    playbackManager.startPlayback();
   };
 
   const stopPlaybackHandler = () => {
     log.info("stop-playback");
-    stopPlayback();
-    socket.emit("playback-stopped");
+    playbackManager.stopPlayback();
   };
 
-  const startPlaybackHandler = (gameId: string) => {
-    log.info("start-playback");
-    startPlayback(socket, gameId);
-    socket.emit("playback-started");
+  const loadPlaybackHandler = (gameId: string) => {
+    log.info("load-playback");
+    playbackManager.loadPlayback(gameId);
+  };
+
+  const setPlaybackCurrentFrameHandler = (currentFrame: number) => {
+    log.info("set-playback-current-frame", currentFrame.valueOf());
+    playbackManager.setPlaybackCurrentFrame(currentFrame);
   };
 
   const getPlaybackLibraryHandler = () => {
@@ -77,14 +76,28 @@ export const handlers = (
     socket.emit("playback-library", library);
   };
 
+  const startRecordingHandler = async () => {
+    log.info("start-recording");
+    const result = await startRecordingListener(socket);
+    if (result) socket.emit("recording-started");
+  };
+
+  const stopRecordingHandler = () => {
+    log.info("stop-recording");
+    socketManager.ws?.close();
+    socket.emit("recording-stopped");
+  };
+
   return {
     sendPacketHandler,
     closeWSSHandler,
-    stopRecordingHandler,
-    startRecordingHandler,
-    stopPlaybackHandler,
-    startPlaybackHandler,
     openWSSHandler,
+    startPlaybackHandler,
+    stopPlaybackHandler,
+    loadPlaybackHandler,
+    setPlaybackCurrentFrameHandler,
     getPlaybackLibraryHandler,
+    startRecordingHandler,
+    stopRecordingHandler,
   };
 };
