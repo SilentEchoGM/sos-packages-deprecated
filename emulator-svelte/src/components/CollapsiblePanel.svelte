@@ -8,12 +8,13 @@
 </script>
 
 <div class="collapsible panel" style:width style:height>
-  <div class="collapsible-header">
+  <div
+    class="collapsible-header"
+    on:click={() => ($state.ui[uiKey] = !$state.ui[uiKey])}>
     <h2>
       {header}
     </h2>
-    <button on:click={() => ($state.ui[uiKey] = !$state.ui[uiKey])}
-      ><div class:rotated={$state.ui[uiKey]}>◀</div></button>
+    <button><div class:rotated={$state.ui[uiKey]}>◀</div></button>
   </div>
   {#if $state.ui[uiKey]}
     <slot />
@@ -45,6 +46,10 @@
     align-items: baseline;
     grid-template-columns: auto 3.2em;
     gap: 1em;
-    background-color: var(--purple);
+    /* background-color: var(--purple); */
+    /* background-color: blue; */
+    left: -1em;
+    padding: 0.5em;
+    cursor: pointer;
   }
 </style>
