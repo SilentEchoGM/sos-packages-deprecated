@@ -29,6 +29,7 @@
   --orange: #bb745a;
   --purple: #33303d;
   --gray: #5e5f5f;
+  --maroon: rgba(255, 0, 0, 0.377);
   font-family: OpenDyslexic;
   font-weight: bold;
 }
@@ -97,7 +98,7 @@ h2 {
   font-weight: 600;
   margin: 0;
   padding: 0;
-  left: -0.5em;
+  left: -0.3em;
 }
 ::-webkit-scrollbar {
   display: none;
