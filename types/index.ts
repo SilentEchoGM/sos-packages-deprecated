@@ -1,3 +1,5 @@
+import { ord as Ord, date as D } from "fp-ts";
+
 export const sosEvents = [
   "game:update_state", //
   "game:initialized", //
@@ -256,3 +258,21 @@ export namespace SOS {
 
   export type GameState = typeof gameStates[number];
 }
+
+export type DatedPacket = SOS.Packet & {
+  date: Date;
+};
+
+export const isPacket = (possiblePacket: any): possiblePacket is SOS.Packet => {
+  if (possiblePacket)
+    return "data" in possiblePacket && "event" in possiblePacket;
+};
+
+export const isDatedPacket = (
+  possiblePacket: any
+): possiblePacket is DatedPacket =>
+  isPacket(possiblePacket) && "date" in possiblePacket;
+
+export const ordDatedPacket: Ord.Ord<DatedPacket> = Ord.fromCompare((a, b) =>
+  D.Ord.compare(a.date, b.date)
+);

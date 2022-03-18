@@ -4,8 +4,10 @@ export declare namespace SOSEmulator {
         "send-packet": (packet: SOS.Packet) => void;
         "close-wss": () => void;
         "open-wss": () => void;
-        "start-playback": (gameId: string) => void;
+        "load-playback": (gameId: string) => void;
+        "start-playback": () => void;
         "stop-playback": () => void;
+        "set-playback-current-frame": (currentFrame: number) => void;
         "get-playback-library": () => void;
         "start-recording": () => void;
         "stop-recording": () => void;
@@ -13,11 +15,17 @@ export declare namespace SOSEmulator {
     interface BackendToFrontendEvents {
         "wss-closed": () => void;
         "wss-open": () => void;
+        "wss-port-busy": () => void;
         "playback-started": () => void;
         "playback-stopped": () => void;
         "playback-library": (library: string[]) => void;
+        "playback-length": (length: number) => void;
+        "playback-loaded": (length: number) => void;
+        "playback-current-frame": (currentFrame: number) => void;
+        "playback-load-error": () => void;
         "recording-started": () => void;
         "recording-stopped": () => void;
+        "recording-no-server": () => void;
         initial: () => void;
     }
 }
